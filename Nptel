@@ -104,7 +104,97 @@
         options: ["Designing", "Manufacturing", "Developing", "Prototyping"],
         answer: "Manufacturing"
       }
-    ];
+{"week":2,"question":"________ is a majorly iterative process.","options":["Automation","Marketing","Design","Production"],"answer":"Design"}, 
+{"week":2,"question":"Which is not a benefit of CAD?","options":["Productivity Increase","Supports Changeability","Automation of repeated task","Unrealistic product rendering"],"answer":"Unrealistic product rendering"},
+{"week":2,"question":"__________ display pictures by dividing the display screen into thousands (or millions) of pixels, arranged in rows and columns.","options":["Color monitor","Graphics monitor","Flat panel display","Raster"],"answer":"Graphics monitor"},
+{"week":2,"question":"In the coordinate system, for which coordinate do we have a choice to point it into the screen or out of the screen?","options":["Coordinate Y","Coordinate Z","Coordinate X","None of these"],"answer":"Coordinate Z"},
+{"week":2,"question":"________ is a transformation, which allows a copy of the object to be displayed while the object is mirrored about a line or a plane.","options":["Refraction","Reflection","Reverse","Rotation"],"answer":"Reflection"},
+{"week":2,"question":"Which of the following is NOT a type of reflection?","options":["Reflection about the x-axis","Rotation about the Z-axis","Reflection about an axis perpendicular to xy plane","Reflection about line y=x"],"answer":"Rotation about the Z-axis"},
+{"week":2,"question":"The positive value of the pivot point rotates in the __________ direction.","options":["clockwise","reverse","counterclockwise","forward"],"answer":"counterclockwise"},
+{"week":2,"question":"It is desirable to express all geometric transformations in the form of matrix multiplication only.","options":["True","False"],"answer":"True"}, 
+{"week":2,"question":"The mixture of cyan and magenta will result in the ______ colour.","options":["yellow","Green","blue","Red"],"answer":"blue"}, {"week":2,"question":"In homogeneous coordinates, how is an n-dimensional space represented?","options":["(n-1) dimensional space","(n+1) dimensional space","(n+2) dimensional space","(n/2) dimensional space"],"answer":"(n+1) dimensional space"},
+  {"week": 3, "question": "A geometric model contains a description of the modelled object’s shape.", "options": ["True", "False"], "answer": "True"},
+  {"week": 3, "question": "___________ is the technique of creating technical drawings whether in 2D or 3D.", "options": ["Designing", "Drafting", "Prototyping", "Transforming"], "answer": "Drafting"},
+  {"week": 3, "question": "What is a planar surface?", "options": ["A flat 2D surface", "Curved surface", "Ruled surface", "3D surface"], "answer": "A flat 2D surface"},
+  {"week": 3, "question": "A __________ is a mathematical defined curve used in two-dimensional graphical applications.", "options": ["B-splines curve", "NURBS curve", "Bezier curve", "Parabola curve"], "answer": "Bezier curve"},
+  {"week": 3, "question": "Evaluation of NURBS reasonably fast and numerically unstable.", "options": ["True", "False"], "answer": "False"},
+  {"week": 3, "question": "Which of the following is not an advantage of NC?", "options": ["Simpler fixtures", "Shorter lead time", "Great accuracy and repeatability", "High investment cost"], "answer": "High investment cost"},
+  {"week": 3, "question": "The _______ of a Bezier curve can be altered by moving the control points.", "options": ["shape", "colour", "plane", "phase"], "answer": "shape"},
+  {"week": 3, "question": "The implicit of a hyperbola is given by:", "options": ["x/a−y/b=1", "x/a−y/b=0", "x^2/y^2−y^2/b^2=1", "x^2/a^2−y^2/b^2=0"], "answer": "x^2/y^2−y^2/b^2=1"},
+  {"week": 3, "question": "________ defines ±3σ of the mechanical error distribution association with the axis.", "options": ["Accuracy", "Repeatability", "Control resolution", "Precision"], "answer": "Repeatability"},
+  {"week": 3, "question": "Which component of a stepper motor is responsible for creating the electromagnetic field?", "options": ["Rotor", "Bearings", "Stator coils", "Driver circuit"], "answer": "Stator coils"},
+  {"week": 4, "question": "What is the most fundamental defining characteristic of a CNC machining centre?", "options": ["Automatic tool changer", "Good quality surface finish", "Table clamping mechanism", "Spindle orientation"], "answer": "Spindle orientation"},
+  {"week": 4, "question": "The chuck in a CNC Turning machine spins at various:", "options": ["PPM", "MRRs", "RPMs", "None of these"], "answer": "RPMs"},
+  {"week": 4, "question": "According to the orientation of spindle, CNC machining center can be classified as:", "options": ["VMCs", "HMCs", "UMC", "All of these"], "answer": "All of these"},
+  {"week": 4, "question": "Multi-axis cutting tools can move in many directions, enabling the most precise cuts possible on the materials at-hand.", "options": ["True", "False"], "answer": "True"},
+  {"week": 4, "question": "_________ is composed of high carbon steel with a reasonable amount of element alloys like chromium, tungsten, and molybdenum.", "options": ["Cemented carbide", "High speed steel", "Clamping system", "Retention knob"], "answer": "High speed steel"},
+  {"week": 4, "question": "Cemented carbide consist of fine particles of carbide cemented into a composite by a binder metal.", "options": ["True", "False"], "answer": "True"},
+  {"week": 4, "question": "The large nose angles and side cutting angle on the ceramic helps to__________.", "options": ["avoid coolants", "reduce feed rate", "increase feed rate", "to reduce the tendency of chipping"], "answer": "to reduce the tendency of chipping"},
+  {"week": 4, "question": "________ is used in computerized numerical control machine tools to improve the production and tool carrying capacity of the machine.", "options": ["Tool turret", "Automatic tool changer", "Tombstone", "Modular fixture"], "answer": "Automatic tool changer"},
+  {"week": 4, "question": "A tombstone is used for supporting complex workpieces.", "options": ["True", "False"], "answer": "False"},
+  {"week": 4, "question": "What is the first step in the tool change process for a CNC machine when replacing a tool?", "options": ["Moving the tool change arm to the spindle", "Stopping the spindle at the correct orientation", "Indexing the tool magazine to the correct position", "Picking the tool from the spindle"], "answer": "Stopping the spindle at the correct orientation"},
+  {
+    "week": 5,
+    "question": "An actuation device could be a servomotor, a hydraulic actuator, or a step motor.",
+    "options": ["True", "False"],
+    "answer": "True"
+  },
+  {
+    "week": 5,
+    "question": "NC part programming creates NC _______, which provides the instructions that drive cutters and control machine operations.",
+    "options": ["codes", "symbols", "inputs", "system"],
+    "answer": "codes"
+  },
+  {
+    "week": 5,
+    "question": "What term is used to describe the process where instructions given to the servos are modified according to the measured response of the system?",
+    "options": ["Open-loop control", "Feedback control", "Closed-loop control", "Servo coordination"],
+    "answer": "Closed-loop control"
+  },
+  {
+    "week": 5,
+    "question": "The Z-axis is considered the most important in machining in the XYZ system.",
+    "options": ["True", "False"],
+    "answer": "True"
+  },
+  {
+    "week": 5,
+    "question": "_______ is a good example of a Point-to-Point (PTP) machine.",
+    "options": ["Lathe", "Rolling Machine", "A hole-drilling machine", "Machining Center"],
+    "answer": "A hole-drilling machine"
+  },
+  {
+    "week": 5,
+    "question": "What is the most common motion configuration in many aspects for CNC machines?",
+    "options": ["Two Axis", "Three Axis", "Four Axis", "Six Axis"],
+    "answer": "Three Axis"
+  },
+  {
+    "week": 5,
+    "question": "Automatically programmed tool uses language statements to define part-shape and tool-motion as well as machine tool dependent data.",
+    "options": ["True", "False"],
+    "answer": "True"
+  },
+  {
+    "week": 5,
+    "question": "Which of the following terms is used for commands in NC program that may stay in effective indefinitely until explicitly cancelled or changed by some other command?",
+    "options": ["Non-modal commands", "Single-use commands", "Modal commands", "Temporary commands"],
+    "answer": "Modal commands"
+  },
+  {
+    "week": 5,
+    "question": "________ is the smallest unit of a CNC program?",
+    "options": ["Word", "Block", "Character", "Program"],
+    "answer": "Character"
+  },
+  {
+    "week": 5,
+    "question": "A block in CNC programming is always a combination of alpha-numeric characters.",
+    "options": ["True", "False"],
+    "answer": "False"
+  },
+  // Additional questions from week 6 to 12 go here...
+ 
 
     let currentQuestions = [];
     let currentIndex = 0;
