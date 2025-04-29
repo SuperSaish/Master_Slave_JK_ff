@@ -95,19 +95,6 @@
 
   <script>
     const allQuestions = [
-      {
-        week: 1,
-        question: "When did the idea of “digital manufacturing” gain prominence?",
-        options: ["1960s", "1970s", "1980s", "1990s"],
-        answer: "1970s"
-      },
-      {
-        week: 2,
-        question: "________ is the process of converting raw materials, components or parts into finished goods.",
-        options: ["Designing", "Manufacturing", "Developing", "Prototyping"],
-        answer: "Manufacturing"
-      },
-	
   {
     week: 1,
     question: "________ is the process of converting raw materials, components or parts into finished goods that meet a customer’s expectations and specifications.",
