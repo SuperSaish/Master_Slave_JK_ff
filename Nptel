@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>NPTEL CIM Quiz</title>
   <style>
     body {
@@ -45,8 +45,9 @@
       cursor: pointer;
       font-size: 16px;
     }
-    button:hover {
-      background-color: #45a049;
+    button:disabled {
+      background-color: gray;
+      cursor: not-allowed;
     }
     .feedback {
       margin-top: 10px;
@@ -58,43 +59,51 @@
     .incorrect {
       color: red;
     }
-    #next-button {
-      display: none;
-      margin-top: 10px;
-    }
   </style>
 </head>
 <body>
   <h1>NPTEL CIM Quiz</h1>
   <div id="start">
     <label>
-      <input type="checkbox" id="randomize"> Randomize Questions
-    </label><br><br>
+      <input type="checkbox" id="randomize" /> Randomize Questions
+    </label><br /><br />
     <label>
       Choose Week:
       <select id="week-select">
         <option value="all">All Weeks</option>
-        ${[...Array(12).keys()].map(i => `<option value="${i+1}">Week ${i+1}</option>`).join('')}
+        <option value="1">Week 1</option>
+        <option value="2">Week 2</option>
       </select>
-    </label><br><br>
+    </label><br /><br />
     <button onclick="startQuiz()">Start Quiz</button>
-  </div>  
+  </div>
 
-  <div id="quiz">
+  <div id="quiz" style="display: none;">
     <div id="question-container"></div>
+    <div class="feedback" id="feedback"></div>
     <button id="submit-button" onclick="submitAnswer()">Submit Answer</button>
-  </div>  
+    <button id="next-button" onclick="nextQuestion()" style="display: none;">Next Question</button>
+  </div>
 
-  <div id="score">
+  <div id="score" style="display: none;">
     <h2>Your Score: <span id="final-score"></span></h2>
     <button onclick="location.reload()">Restart</button>
-  </div>  
+  </div>
 
   <script>
     const allQuestions = [
-      {"week":1,"question":"When did the idea of “digital manufacturing” gain prominence?","options":["1960s","1970s","1980s","1990s"],"answer":"1970s"},
-      {"week":1,"question":"________ is the process of converting raw materials, components or parts into finished goods that meet a customer’s expectations and specifications.","options":["Designing","Manufacturing","Developing","Prototyping"],"answer":"Manufacturing"},
-      // Add more questions as needed
+      {
+        week: 1,
+        question: "When did the idea of “digital manufacturing” gain prominence?",
+        options: ["1960s", "1970s", "1980s", "1990s"],
+        answer: "1970s"
+      },
+      {
+        week: 1,
+        question: "________ is the process of converting raw materials, components or parts into finished goods.",
+        options: ["Designing", "Manufacturing", "Developing", "Prototyping"],
+        answer: "Manufacturing"
+      }
     ];
 
     let currentQuestions = [];
@@ -102,59 +111,61 @@
     let score = 0;
 
     function startQuiz() {
-      const randomize = document.getElementById('randomize').checked;
-      const week = document.getElementById('week-select').value;
+      const randomize = document.getElementById("randomize").checked;
+      const week = document.getElementById("week-select").value;
 
-      currentQuestions = week === 'all'
-        ? allQuestions
-        : allQuestions.filter(q => q.week === Number(week));
+      currentQuestions =
+        week === "all"
+          ? allQuestions
+          : allQuestions.filter(q => q.week === Number(week));
 
       if (randomize) currentQuestions = shuffle(currentQuestions);
 
-      document.getElementById('start').style.display = 'none';
-      document.getElementById('quiz').style.display = 'block';
+      document.getElementById("start").style.display = "none";
+      document.getElementById("quiz").style.display = "block";
 
       showQuestion();
     }
 
     function showQuestion() {
-      const container = document.getElementById('question-container');
       const q = currentQuestions[currentIndex];
+      const container = document.getElementById("question-container");
+
       container.innerHTML = `
         <div class="question">Q${currentIndex + 1}: ${q.question}</div>
         <div class="options">
-          ${q.options.map(opt => `
-            <label><input type="radio" name="answer" value="${opt}"> ${opt}</label>
-          `).join('')}
+          ${q.options
+            .map(
+              opt => `
+              <label><input type="radio" name="answer" value="${opt}"> ${opt}</label>
+            `
+            )
+            .join("")}
         </div>
-        <div class="feedback" id="feedback"></div>
-        <button id="next-button" onclick="nextQuestion()">Next Question</button>
       `;
 
-      // Reset button states
-      document.getElementById('next-button').style.display = 'none';
-      document.getElementById('submit-button').disabled = false;
+      document.getElementById("feedback").innerHTML = "";
+      document.getElementById("submit-button").disabled = false;
+      document.getElementById("next-button").style.display = "none";
     }
 
     function submitAnswer() {
       const selected = document.querySelector('input[name="answer"]:checked');
-      const feedback = document.getElementById('feedback');
-      const submitBtn = document.getElementById('submit-button');
+      const feedback = document.getElementById("feedback");
 
       if (!selected) return alert("Please select an answer.");
 
-      // Disable submit button
-      submitBtn.disabled = true;
-
-      const isCorrect = selected.value === currentQuestions[currentIndex].answer;
-      if (isCorrect) {
+      const correct = currentQuestions[currentIndex].answer;
+      if (selected.value === correct) {
         score++;
         feedback.innerHTML = `<span class="correct">Correct!</span>`;
       } else {
-        feedback.innerHTML = `<span class="incorrect">Incorrect! The correct answer is: ${currentQuestions[currentIndex].answer}</span>`;
+        feedback.innerHTML = `<span class="incorrect">Incorrect! Correct answer is: ${correct}</span>`;
       }
 
-      document.getElementById('next-button').style.display = 'inline-block';
+      // Disable submit, enable next
+      document.getElementById("submit-button").disabled = true;
+      document.getElementById("next-button").style.display = "inline-block";
     }
 
     function nextQuestion() {
@@ -162,9 +173,9 @@
       if (currentIndex < currentQuestions.length) {
         showQuestion();
       } else {
-        document.getElementById('quiz').style.display = 'none';
-        document.getElementById('score').style.display = 'block';
-        document.getElementById('final-score').innerText = `${score} / ${currentQuestions.length}`;
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("score").style.display = "block";
+        document.getElementById("final-score").innerText = `${score} / ${currentQuestions.length}`;
       }
     }
 
