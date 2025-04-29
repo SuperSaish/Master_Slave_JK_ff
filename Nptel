@@ -73,6 +73,9 @@
         <option value="all">All Weeks</option>
         <option value="1">Week 1</option>
         <option value="2">Week 2</option>
+	<option value="3">Week 3</option>
+	<option value="4">Week 4</option>
+	<option value="5">Week 5</option>
       </select>
     </label><br /><br />
     <button onclick="startQuiz()">Start Quiz</button>
@@ -99,11 +102,217 @@
         answer: "1970s"
       },
       {
-        week: 1,
+        week: 2,
         question: "________ is the process of converting raw materials, components or parts into finished goods.",
         options: ["Designing", "Manufacturing", "Developing", "Prototyping"],
         answer: "Manufacturing"
-      }
+      },
+	
+  {
+    week: 1,
+    question: "________ is the process of converting raw materials, components or parts into finished goods that meet a customer’s expectations and specifications.",
+    options: ["Designing", "Manufacturing", "Developing", "Prototyping"],
+    answer: "Manufacturing"
+  },
+  {
+    week: 1,
+    question: "When did the idea of digital manufacturing gain prominence?",
+    options: ["1960s", "1970s", "1980s", "1990s"],
+    answer: "1970s"
+  },
+  {
+    week:1,
+    question: "Why do businesses sell finished products at a premium in manufacturing?",
+    options: ["To cover the cost of raw materials", "To make a profit and cover manufacturing costs", "To encourage customers to buy more raw materials", "None of these"],
+    answer: "To make a profit and cover manufacturing costs"
+  },
+  {
+    week: 1,
+    question: "Which functional areas are linked through the computer in a CIM system?",
+    options: ["Research, Development, Implementation, Marketing", "Design, Analysis, Planning, Purchasing", "Raw Material, Production, Transportation, Marketing", "Feedback, Evaluation, Planning, Execution"],
+    answer: "Design, Analysis, Planning, Purchasing"
+  },
+  {
+    week: 1,
+    question: "__________ is the initial stage in the CIM process that involves creating digital representation of products.",
+    options: ["Prototype Manufacture", "Determining Efficient Manufacturing Methods", "Computer-Aided Design", "Ordering of Materials"],
+    answer: "Computer-Aided Design"
+  },
+  {
+    week: 1,
+    question: "Which is not a function of the Manufacturing Support System?",
+    options: ["Business functions", "Product design", "Manufacturing planning", "Circular economy"],
+    answer: "Circular economy"
+  },
+  {
+    week: 1,
+    question: "Product assembly is performed solely with the help of humans.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 1,
+    question: "__________ will perform complex manufacturing, quality control, reduce materials waste, allowing machines to adapt and improve their performance over time.",
+    options: ["Artificial Intelligence", "Digital Manufacturing", "Internet of Things (IOT)", "Subtractive Manufacturing"],
+    answer: "Artificial Intelligence"
+  },
+  {
+    week: 1,
+    question: "_________ is a chip, an extension card, or a stand-alone device that interfaces with a peripheral device.",
+    options: ["Programmable card", "Remote card", "Adaptive charger", "Controller"],
+    answer: "Controller"
+  },
+  {
+    week: 1,
+    question: "Which function are part of CIM addition to firm?",
+    options: ["Only CAD/CAM", "Only business functions of the firm", "Both of these", "None of these"],
+    answer: "Both of these"
+  },
+  {
+    week: 2,
+    question: "________ is a majorly iterative process.",
+    options: ["Automation", "Marketing", "Design", "Production"],
+    answer: "Design"
+  },
+  {
+    week: 2,
+    question: "Which is not a benefit of CAD?",
+    options: ["Productivity Increase", "Supports Changeability", "Automation of repeated task", "Unrealistic product rendering"],
+    answer: "Unrealistic product rendering"
+  },
+  {
+    week: 2,
+    question: "__________ display pictures by dividing the display screen into thousands (or millions) of pixels, arranged in rows and columns.",
+    options: ["Color monitor", "Graphics monitor", "Flat panel display", "Raster"],
+    answer: "Graphics monitor"
+  },
+  {
+    week: 2,
+    question: "In the coordinate system, for which coordinate do we have a choice to point it into the screen or out of the screen?",
+    options: ["Coordinate Y", "Coordinate Z", "Coordinate X", "None of these"],
+    answer: "Coordinate Z"
+  },
+  {
+    week: 2,
+    question: "________ is a transformation, which allows a copy of the object to be displayed while the object is mirrored about a line or a plane.",
+    options: ["Refraction", "Reflection", "Reverse", "Rotation"],
+    answer: "Reflection"
+  },
+  {
+    week: 2,
+    question: "Which of the following is NOT a type of reflection?",
+    options: ["Reflection about the x-axis", "Rotation about the Z-axis", "Reflection about an axis perpendicular to xy plane", "Reflection about line y=x"],
+    answer: "Rotation about the Z-axis"
+  },
+  {
+    week: 2,
+    question: "The positive value of the pivot point rotates in the __________ direction.",
+    options: ["clockwise", "reverse", "counterclockwise", "forward"],
+    answer: "counterclockwise"
+  },
+  {
+    week: 2,
+    question: "It is desirable to express all geometric transformations in the form of matrix multiplication only.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 2,
+    question: "The mixture of cyan and magenta will result in the ______ colour.",
+    options: ["yellow", "Green", "blue", "Red"],
+    answer: "blue"
+  },
+  {
+    week: 2,
+    question: "In homogeneous coordinates, how is an n-dimensional space represented?",
+    options: ["(n-1) dimensional space", "(n+1) dimensional space", "(n+2) dimensional space", "(n/2) dimensional space"],
+    answer: "(n+1) dimensional space"
+  },
+  {
+    week: 3,
+    question: "A geometric model contains a description of the modelled object’s shape.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 3,
+    question: "___________ is the technique of creating technical drawings whether in 2D or 3D.",
+    options: ["Designing", "Drafting", "Prototyping", "Transforming"],
+    answer: "Drafting"
+  },
+  {
+    week: 3,
+    question: "What is a planar surface?",
+    options: ["A flat 2D surface", "Curved surface", "Ruled surface", "3D surface"],
+    answer: "A flat 2D surface"
+  },
+  {
+    week: 3,
+    question: "A __________ is a mathematical defined curve used in two-dimensional graphical applications.",
+    options: ["B-splines curve", "NURBS curve", "Bezier curve", "Parabola curve"],
+    answer: "Bezier curve"
+  },
+  {
+    week: 3,
+    question: "Evaluation of NURBS reasonably fast and numerically unstable.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 3,
+    question: "Which of the following is not an advantage of NC?",
+    options: ["Simpler fixtures", "Shorter lead time", "Great accuracy and repeatability", "High investment cost"],
+    answer: "High investment cost"
+  },
+  {
+    week: 3,
+    question: "The _______ of a Bezier curve can be altered by moving the control points.",
+    options: ["shape", "colour", "plane", "phase"],
+    answer: "shape"
+  },
+  {
+    week:3,
+    question: "The implicit of a hyperbola is given by:",
+    options: ["x/a−y/b=1", "x/a−y/b=0", "x^2/y^2−y^2/b^2=1", "x^2/a^2−y^2/b^2=0"],
+    answer: "x^2/y^2−y^2/b^2=1"
+  },
+  {
+    week: 3,
+    question: "________ defines ±3σ of the mechanical error distribution association with the axis.",
+    options: ["Accuracy", "Repeatability", "Control resolution", "Precision"],
+    answer: "Repeatability"
+  },
+  {
+    week: 3,
+    question: "Which component of a stepper motor is responsible for creating the electromagnetic field?",
+    options: ["Rotor", "Bearings", "Stator coils", "Driver circuit"],
+    answer: "Stator coils"
+  },
+  {
+    week: 4,
+    question: "What is the most fundamental defining characteristic of a CNC machining centre?",
+    options: ["Automatic tool changer", "Good quality surface finish", "Table clamping mechanism", "Spindle orientation"],
+    answer: "Spindle orientation"
+  },
+  {
+    week: 4,
+    question: "The chuck in a CNC Turning machine spins at various:",
+    options: ["PPM", "MRRs", "RPMs", "None of these"],
+    answer: "RPMs"
+  },
+  {
+    week: 4,
+    question: "According to the orientation of spindle, CNC machining center can be classified as:",
+    options: ["VMCs", "HMCs", "UMC", "All of these"],
+    answer: "All of these"
+  },
+  {
+    week: 4,
+    question: "Multi-axis cutting tools can move in many directions, enabling the most precise cuts possible on the materials at-hand.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+ 
     ];
 
     let currentQuestions = [];
