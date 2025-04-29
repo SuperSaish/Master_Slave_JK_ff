@@ -131,6 +131,7 @@
         <div class="feedback" id="feedback"></div>
         <button id="next-button" onclick="nextQuestion()">Next Question</button>
       `;
+      document.getElementById('next-button').style.display = 'none'; // Ensure next button is hidden initially
     }
 
     function submitAnswer() {
