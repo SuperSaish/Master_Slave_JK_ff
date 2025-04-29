@@ -59,7 +59,7 @@
       color: red;
     }
     #next-button {
-      display: none; /* Hidden initially, will be shown after feedback */
+      display: none;
       margin-top: 10px;
     }
   </style>
@@ -82,7 +82,7 @@
 
   <div id="quiz">
     <div id="question-container"></div>
-    <button onclick="submitAnswer()">Submit Answer</button>
+    <button id="submit-button" onclick="submitAnswer()">Submit Answer</button>
   </div>  
 
   <div id="score">
@@ -92,12 +92,11 @@
 
   <script>
     const allQuestions = [
-      // Week 1 Questions
       {"week":1,"question":"When did the idea of “digital manufacturing” gain prominence?","options":["1960s","1970s","1980s","1990s"],"answer":"1970s"},
       {"week":1,"question":"________ is the process of converting raw materials, components or parts into finished goods that meet a customer’s expectations and specifications.","options":["Designing","Manufacturing","Developing","Prototyping"],"answer":"Manufacturing"},
-      // More questions...
+      // Add more questions as needed
     ];
-    
+
     let currentQuestions = [];
     let currentIndex = 0;
     let score = 0;
@@ -131,15 +130,22 @@
         <div class="feedback" id="feedback"></div>
         <button id="next-button" onclick="nextQuestion()">Next Question</button>
       `;
-      document.getElementById('next-button').style.display = 'none'; // Ensure next button is hidden initially
+
+      // Reset button states
+      document.getElementById('next-button').style.display = 'none';
+      document.getElementById('submit-button').disabled = false;
     }
 
     function submitAnswer() {
       const selected = document.querySelector('input[name="answer"]:checked');
       const feedback = document.getElementById('feedback');
-      
+      const submitBtn = document.getElementById('submit-button');
+
       if (!selected) return alert("Please select an answer.");
-      
+
+      // Disable submit button
+      submitBtn.disabled = true;
+
       const isCorrect = selected.value === currentQuestions[currentIndex].answer;
       if (isCorrect) {
         score++;
@@ -148,14 +154,10 @@
         feedback.innerHTML = `<span class="incorrect">Incorrect! The correct answer is: ${currentQuestions[currentIndex].answer}</span>`;
       }
 
-      // Show the Next Question button after submitting the answer
       document.getElementById('next-button').style.display = 'inline-block';
     }
 
     function nextQuestion() {
-      // Hide the next button and show the next question
-      document.getElementById('next-button').style.display = 'none';
-
       currentIndex++;
       if (currentIndex < currentQuestions.length) {
         showQuestion();
@@ -174,6 +176,5 @@
       return array;
     }
   </script>
-  <script src="questions.js"></script>
 </body>
 </html>
