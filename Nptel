@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NPTEL CIM Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }h1 {
+  margin-top: 40px;
+  color: #333;
+}
+
+#start, #quiz, #score {
+  background-color: #fff;
+  padding: 20px 30px;
+  margin: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 700px;
+}
+
+.question {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.options label {
+  display: block;
+  margin: 8px 0;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+  </style>
+</head>
+<body>
+  <h1>NPTEL CIM Quiz</h1>
+  <div id="start">
+    <label>
+      <input type="checkbox" id="randomize"> Randomize Questions
+    </label><br><br>
+    <label>
+      Choose Week:
+      <select id="week-select">
+        <option value="all">All Weeks</option>
+        ${[...Array(12).keys()].map(i => `<option value="${i+1}">Week ${i+1}</option>`).join('')}
+      </select>
+    </label><br><br>
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>  <div id="quiz">
+    <div id="question-container"></div>
+    <button onclick="submitAnswer()">Submit Answer</button>
+  </div>  <div id="score">
+    <h2>Your Score: <span id="final-score"></span></h2>
+    <button onclick="location.reload()">Restart</button>
+  </div>  <script>
+    const allQuestions = [
+// WEEK 1
+{"week":1,"question":"When did the idea of “digital manufacturing” gain prominence?","options":["1960s","1970s","1980s","1990s"],"answer":"1970s"},
+{"week":1,"question":"________ is the process of converting raw materials, components or parts into finished goods that meet a customer’s expectations and specifications.","options":["Designing","Manufacturing","Developing","Prototyping"],"answer":"Manufacturing"},
+{"week":1,"question":"Why do businesses sell finished products at a premium in manufacturing?","options":["To cover the cost of raw materials","To make a profit and cover manufacturing costs","To encourage customers to buy more raw materials","None of these"],"answer":"To make a profit and cover manufacturing costs"},
+{"week":1,"question":"Which functional areas are linked through the computer in a CIM system?","options":["Research, Development, Implementation, Marketing","Design, Analysis, Planning, Purchasing","Raw Material, Production, Transportation, Marketing","Feedback, Evaluation, Planning, Execution"],"answer":"Design, Analysis, Planning, Purchasing"},
+{"week":1,"question":"__________ is the initial stage in the CIM process that involves creating digital representation of products.","options":["Prototype Manufacture","Determining Efficient Manufacturing Methods","Computer-Aided Design","Ordering of Materials"],"answer":"Computer-Aided Design"},
+{"week":1,"question":"Which is not a function of the Manufacturing Support System?","options":["Business functions","Product design","Manufacturing planning","Circular economy"],"answer":"Circular economy"},
+{"week":1,"question":"Product assembly is performed solely with the help of humans.","options":["True","False"],"answer":"False"},
+{"week":1,"question":"__________ will perform complex manufacturing, quality control, reduce materials waste, allowing machines to adapt and improve their performance over time.","options":["Artificial Intelligence","Digital Manufacturing","Internet of Things (IOT)","Subtractive Manufacturing"],"answer":"Artificial Intelligence"},
+{"week":1,"question":"_________ is a chip, an extension card, or a stand-alone device that interfaces with a peripheral device.","options":["Programmable card","Remote card","Adaptive charger","Controller"],"answer":"Controller"},
+{"week":1,"question":"Which function are part of CIM addition to firm?","options":["Only CAD/CAM","Only business functions of the firm","Both of these","None of these"],"answer":"Both of these"},
+// WEEK 2
+{"week":2,"question":"________ is a majorly iterative process.","options":["Automation","Marketing","Design","Production"],"answer":"Design"},
+{"week":2,"question":"Which is not a benefit of CAD?","options":["Productivity Increase","Supports Changeability","Automation of repeated task","Unrealistic product rendering"],"answer":"Unrealistic product rendering"},
+{"week":2,"question":"__________ display pictures by dividing the display screen into thousands (or millions) of pixels, arranged in rows and columns.","options":["Color monitor","Graphics monitor","Flat panel display","Raster"],"answer":"Graphics monitor"},
+{"week":2,"question":"In the coordinate system, for which coordinate do we have a choice to point it into the screen or out of the screen?","options":["Coordinate Y","Coordinate Z","Coordinate X","None of these"],"answer":"Coordinate Z"},
+{"week":2,"question":"________ is a transformation, which allows a copy of the object to be displayed while the object is mirrored about a line or a plane.","options":["Refraction","Reflection","Reverse","Rotation"],"answer":"Reflection"},
+{"week":2,"question":"Which of the following is NOT a type of reflection?","options":["Reflection about the x-axis","Rotation about the Z-axis","Reflection about an axis perpendicular to xy plane","Reflection about line y=x"],"answer":"Rotation about the Z-axis"},
+{"week":2,"question":"The positive value of the pivot point rotates in the __________ direction.","options":["clockwise","reverse","counterclockwise","forward"],"answer":"counterclockwise"},
+{"week":2,"question":"It is desirable to express all geometric transformations in the form of matrix multiplication only.","options":["True","False"],"answer":"True"},
+{"week":2,"question":"The mixture of cyan and magenta will result in the ______ colour.","options":["yellow","Green","blue","Red"],"answer":"blue"},
+{"week":2,"question":"In homogeneous coordinates, how is an n-dimensional space represented?","options":["(n-1) dimensional space","(n+1) dimensional space","(n+2) dimensional space","(n/2) dimensional space"],"answer":"(n+1) dimensional space"},
+// More weeks follow here...
+];
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let score = 0;
+
+    function startQuiz() {
+      const randomize = document.getElementById('randomize').checked;
+      const week = document.getElementById('week-select').value;
+
+      currentQuestions = week === 'all'
+        ? allQuestions
+        : allQuestions.filter(q => q.week === Number(week));
+
+      if (randomize) currentQuestions = shuffle(currentQuestions);
+
+      document.getElementById('start').style.display = 'none';
+      document.getElementById('quiz').style.display = 'block';
+
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const container = document.getElementById('question-container');
+      const q = currentQuestions[currentIndex];
+      container.innerHTML = `
+        <div class="question">Q${currentIndex + 1}: ${q.question}</div>
+        <div class="options">
+          ${q.options.map(opt => `
+            <label><input type="radio" name="answer" value="${opt}"> ${opt}</label>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function submitAnswer() {
+      const selected = document.querySelector('input[name="answer"]:checked');
+      if (!selected) return alert("Please select an answer.");
+      if (selected.value === currentQuestions[currentIndex].answer) score++;
+
+      currentIndex++;
+      if (currentIndex < currentQuestions.length) {
+        showQuestion();
+      } else {
+        document.getElementById('quiz').style.display = 'none';
+        document.getElementById('score').style.display = 'block';
+        document.getElementById('final-score').innerText = `${score} / ${currentQuestions.length}`;
+      }
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+  </script>  <script src="questions.js"></script></body>
+</html>
