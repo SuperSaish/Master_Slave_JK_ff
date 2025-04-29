@@ -58,6 +58,10 @@
     .incorrect {
       color: red;
     }
+    #next-button {
+      display: none; /* Hidden initially, will be shown after feedback */
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -125,6 +129,7 @@
           `).join('')}
         </div>
         <div class="feedback" id="feedback"></div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
       `;
     }
 
@@ -142,9 +147,17 @@
         feedback.innerHTML = `<span class="incorrect">Incorrect! The correct answer is: ${currentQuestions[currentIndex].answer}</span>`;
       }
 
+      // Show the Next Question button after submitting the answer
+      document.getElementById('next-button').style.display = 'inline-block';
+    }
+
+    function nextQuestion() {
+      // Hide the next button and show the next question
+      document.getElementById('next-button').style.display = 'none';
+
       currentIndex++;
       if (currentIndex < currentQuestions.length) {
-        setTimeout(showQuestion, 1000);  // Show next question after a brief delay
+        showQuestion();
       } else {
         document.getElementById('quiz').style.display = 'none';
         document.getElementById('score').style.display = 'block';
