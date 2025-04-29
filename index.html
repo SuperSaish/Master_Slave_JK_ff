@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NPTEL CIM Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    h1 {
+      margin-top: 40px;
+      color: #333;
+    }
+    #start, #quiz, #score {
+      background-color: #fff;
+      padding: 20px 30px;
+      margin: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 700px;
+    }
+    .question {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .options label {
+      display: block;
+      margin: 8px 0;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:disabled {
+      background-color: gray;
+      cursor: not-allowed;
+    }
+    .feedback {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .correct {
+      color: green;
+    }
+    .incorrect {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>NPTEL CIM Quiz</h1>
+  <div id="start">
+    <label>
+      <input type="checkbox" id="randomize" /> Randomize Questions
+    </label><br /><br />
+    <label>
+      Choose Week:
+      <select id="week-select">
+        <option value="all">All Weeks</option>
+        <option value="1">Week 1</option>
+        <option value="2">Week 2</option>
+	<option value="3">Week 3</option>
+	<option value="4">Week 4</option>
+	<option value="5">Week 5</option>
+	<option value="6">Week 6</option>
+	<option value="7">Week 7</option>
+	<option value="8">Week 8</option>
+	<option value="9">Week 9</option>
+	<option value="10">Week 10</option>
+	<option value="11">Week 11</option>
+	<option value="12">Week 12</option>
+      </select>
+    </label><br /><br />
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <div id="quiz" style="display: none;">
+    <div id="question-container"></div>
+    <div class="feedback" id="feedback"></div>
+    <button id="submit-button" onclick="submitAnswer()">Submit Answer</button>
+    <button id="next-button" onclick="nextQuestion()" style="display: none;">Next Question</button>
+  </div>
+
+  <div id="score" style="display: none;">
+    <h2>Your Score: <span id="final-score"></span></h2>
+    <button onclick="location.reload()">Restart</button>
+  </div>
+
+  <script>
+    const allQuestions = [
+  {
+    week: 1,
+    question: "________ is the process of converting raw materials, components or parts into finished goods that meet a customer’s expectations and specifications.",
+    options: ["Designing", "Manufacturing", "Developing", "Prototyping"],
+    answer: "Manufacturing"
+  },
+  {
+    week: 1,
+    question: "When did the idea of digital manufacturing gain prominence?",
+    options: ["1960s", "1970s", "1980s", "1990s"],
+    answer: "1970s"
+  },
+  {
+    week:1,
+    question: "Why do businesses sell finished products at a premium in manufacturing?",
+    options: ["To cover the cost of raw materials", "To make a profit and cover manufacturing costs", "To encourage customers to buy more raw materials", "None of these"],
+    answer: "To make a profit and cover manufacturing costs"
+  },
+  {
+    week: 1,
+    question: "Which functional areas are linked through the computer in a CIM system?",
+    options: ["Research, Development, Implementation, Marketing", "Design, Analysis, Planning, Purchasing", "Raw Material, Production, Transportation, Marketing", "Feedback, Evaluation, Planning, Execution"],
+    answer: "Design, Analysis, Planning, Purchasing"
+  },
+  {
+    week: 1,
+    question: "__________ is the initial stage in the CIM process that involves creating digital representation of products.",
+    options: ["Prototype Manufacture", "Determining Efficient Manufacturing Methods", "Computer-Aided Design", "Ordering of Materials"],
+    answer: "Computer-Aided Design"
+  },
+  {
+    week: 1,
+    question: "Which is not a function of the Manufacturing Support System?",
+    options: ["Business functions", "Product design", "Manufacturing planning", "Circular economy"],
+    answer: "Circular economy"
+  },
+  {
+    week: 1,
+    question: "Product assembly is performed solely with the help of humans.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 1,
+    question: "__________ will perform complex manufacturing, quality control, reduce materials waste, allowing machines to adapt and improve their performance over time.",
+    options: ["Artificial Intelligence", "Digital Manufacturing", "Internet of Things (IOT)", "Subtractive Manufacturing"],
+    answer: "Artificial Intelligence"
+  },
+  {
+    week: 1,
+    question: "_________ is a chip, an extension card, or a stand-alone device that interfaces with a peripheral device.",
+    options: ["Programmable card", "Remote card", "Adaptive charger", "Controller"],
+    answer: "Controller"
+  },
+  {
+    week: 1,
+    question: "Which function are part of CIM addition to firm?",
+    options: ["Only CAD/CAM", "Only business functions of the firm", "Both of these", "None of these"],
+    answer: "Both of these"
+  },
+  {
+    week: 2,
+    question: "________ is a majorly iterative process.",
+    options: ["Automation", "Marketing", "Design", "Production"],
+    answer: "Design"
+  },
+  {
+    week: 2,
+    question: "Which is not a benefit of CAD?",
+    options: ["Productivity Increase", "Supports Changeability", "Automation of repeated task", "Unrealistic product rendering"],
+    answer: "Unrealistic product rendering"
+  },
+  {
+    week: 2,
+    question: "__________ display pictures by dividing the display screen into thousands (or millions) of pixels, arranged in rows and columns.",
+    options: ["Color monitor", "Graphics monitor", "Flat panel display", "Raster"],
+    answer: "Graphics monitor"
+  },
+  {
+    week: 2,
+    question: "In the coordinate system, for which coordinate do we have a choice to point it into the screen or out of the screen?",
+    options: ["Coordinate Y", "Coordinate Z", "Coordinate X", "None of these"],
+    answer: "Coordinate Z"
+  },
+  {
+    week: 2,
+    question: "________ is a transformation, which allows a copy of the object to be displayed while the object is mirrored about a line or a plane.",
+    options: ["Refraction", "Reflection", "Reverse", "Rotation"],
+    answer: "Reflection"
+  },
+  {
+    week: 2,
+    question: "Which of the following is NOT a type of reflection?",
+    options: ["Reflection about the x-axis", "Rotation about the Z-axis", "Reflection about an axis perpendicular to xy plane", "Reflection about line y=x"],
+    answer: "Rotation about the Z-axis"
+  },
+  {
+    week: 2,
+    question: "The positive value of the pivot point rotates in the __________ direction.",
+    options: ["clockwise", "reverse", "counterclockwise", "forward"],
+    answer: "counterclockwise"
+  },
+  {
+    week: 2,
+    question: "It is desirable to express all geometric transformations in the form of matrix multiplication only.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 2,
+    question: "The mixture of cyan and magenta will result in the ______ colour.",
+    options: ["yellow", "Green", "blue", "Red"],
+    answer: "blue"
+  },
+  {
+    week: 2,
+    question: "In homogeneous coordinates, how is an n-dimensional space represented?",
+    options: ["(n-1) dimensional space", "(n+1) dimensional space", "(n+2) dimensional space", "(n/2) dimensional space"],
+    answer: "(n+1) dimensional space"
+  },
+  {
+    week: 3,
+    question: "A geometric model contains a description of the modelled object’s shape.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 3,
+    question: "___________ is the technique of creating technical drawings whether in 2D or 3D.",
+    options: ["Designing", "Drafting", "Prototyping", "Transforming"],
+    answer: "Drafting"
+  },
+  {
+    week: 3,
+    question: "What is a planar surface?",
+    options: ["A flat 2D surface", "Curved surface", "Ruled surface", "3D surface"],
+    answer: "A flat 2D surface"
+  },
+  {
+    week: 3,
+    question: "A __________ is a mathematical defined curve used in two-dimensional graphical applications.",
+    options: ["B-splines curve", "NURBS curve", "Bezier curve", "Parabola curve"],
+    answer: "Bezier curve"
+  },
+  {
+    week: 3,
+    question: "Evaluation of NURBS reasonably fast and numerically unstable.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 3,
+    question: "Which of the following is not an advantage of NC?",
+    options: ["Simpler fixtures", "Shorter lead time", "Great accuracy and repeatability", "High investment cost"],
+    answer: "High investment cost"
+  },
+  {
+    week: 3,
+    question: "The _______ of a Bezier curve can be altered by moving the control points.",
+    options: ["shape", "colour", "plane", "phase"],
+    answer: "shape"
+  },
+  {
+    week:3,
+    question: "The implicit of a hyperbola is given by:",
+    options: ["x/a−y/b=1", "x/a−y/b=0", "x^2/y^2−y^2/b^2=1", "x^2/a^2−y^2/b^2=0"],
+    answer: "x^2/y^2−y^2/b^2=1"
+  },
+  {
+    week: 3,
+    question: "________ defines ±3σ of the mechanical error distribution association with the axis.",
+    options: ["Accuracy", "Repeatability", "Control resolution", "Precision"],
+    answer: "Repeatability"
+  },
+  {
+    week: 3,
+    question: "Which component of a stepper motor is responsible for creating the electromagnetic field?",
+    options: ["Rotor", "Bearings", "Stator coils", "Driver circuit"],
+    answer: "Stator coils"
+  },
+  {
+    week: 4,
+    question: "What is the most fundamental defining characteristic of a CNC machining centre?",
+    options: ["Automatic tool changer", "Good quality surface finish", "Table clamping mechanism", "Spindle orientation"],
+    answer: "Spindle orientation"
+  },
+  {
+    week: 4,
+    question: "According to the orientation of spindle, CNC machining center can be classified as:",
+    options: ["VMCs", "HMCs", "UMC", "All of these"],
+    answer: "All of these"
+  },
+  {
+    week: 4,
+    question: "Multi-axis cutting tools can move in many directions, enabling the most precise cuts possible on the materials at-hand.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 4,
+    question: "_________ is composed of high carbon steel with a reasonable amount of element alloys like chromium, tungsten, and molybdenum.",
+    options: ["Cemented carbide", "High speed steel", "Clamping system", "Retention knob"],
+    answer: "High speed steel"
+  },
+  {
+    week: 4,
+    question: "Cemented carbide consist of fine particles of carbide cemented into a composite by a binder metal.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 4,
+    question: "The large nose angles and side cutting angle on the ceramic helps to__________.",
+    options: ["avoid coolants", "reduce feed rate", "increase feed rate", "to reduce the tendency of chipping"],
+    answer: "to reduce the tendency of chipping"
+  },
+  {
+    week: 4,
+    question: "________ is used in computerized numerical control machine tools to improve the production and tool carrying capacity of the machine.",
+    options: ["Tool turret", "Automatic tool changer", "Tombstone", "Modular fixture"],
+    answer: "Automatic tool changer"
+  },
+  {
+    week: 4,
+    question: "A tombstone is used for supporting complex workpieces.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 4,
+    question: "What is the first step in the tool change process for a CNC machine when replacing a tool?",
+    options: ["Moving the tool change arm to the spindle", "Stopping the spindle at the correct orientation", "Indexing the tool magazine to the correct position", "Picking the tool from the spindle"],
+    answer: "Stopping the spindle at the correct orientation"
+  },
+  {
+    week: 5,
+    question: "An actuation device could be a servomotor, a hydraulic actuator, or a step motor.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 5,
+    question: "NC part programming creates NC _______, which provides the instructions that drive cutters and control machine operations.",
+    options: ["codes", "symbols", "inputs", "system"],
+    answer: "codes"
+  },
+  {
+    week: 5,
+    question: "What term is used to describe the process where instructions given to the servos are modified according to the measured response of the system?",
+    options: ["Open-loop control", "Feedback control", "Closed-loop control", "Servo coordination"],
+    answer: "Closed-loop control"
+  },
+  {
+    week: 5,
+    question: "The Z-axis is considered the most important in machining in the XYZ system.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 5,
+    question: "_______ is a good example of a Point-to-Point (PTP) machine.",
+    options: ["Lathe", "Rolling Machine", "A hole-drilling machine", "Machining Center"],
+    answer: "A hole-drilling machine"
+  },
+  {
+    week: 5,
+    question: "What is the most common motion configuration in many aspects for CNC machines?",
+    options: ["Two Axis", "Three Axis", "Four Axis", "Six Axis"],
+    answer: "Three Axis"
+  },
+  {
+    week: 5,
+    question: "Automatically programmed tool uses language statements to define part-shape and tool-motion as well as machine tool dependent data.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 5,
+    question: "Which of the following terms is used for commands in NC program that may stay in effective indefinitely until explicitly cancelled or changed by some other command?",
+    options: ["Non-modal commands", "Single-use commands", "Modal commands", "Temporary commands"],
+    answer: "Modal commands"
+  },
+  {
+    week: 5,
+    question: "________ is the smallest unit of a CNC program?",
+    options: ["Word", "Block", "Character", "Program"],
+    answer: "Character"
+  },
+  {
+    week: 5,
+    question: "A block in CNC programming is always a combination of alpha-numeric characters.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 6,
+    question: "What does CAD stand for in the context of Solid Works?",
+    options: ["Computer Animated Design", "Computer-Aided Design", "Creative Application Development", "Control and Analysis Design"],
+    answer: "Computer-Aided Design"
+  },
+  {
+    week: 6,
+    question: "Which Solid Works tool is used to create a 3D shape by sweeping a 2D sketch along a path?",
+    options: ["Loft", "Extrude", "Sweep", "Revolve"],
+    answer: "Sweep"
+  },
+  {
+    week: 6,
+    question: "In SolidWorks, what does the term 'assembly' refer to?",
+    options: ["2D sketch", "Collection of parts that fit together", "Simulation analysis", "Texturing a 3D model"],
+    answer: "Collection of parts that fit together"
+  },
+  {
+    week: 6,
+    question: "How can you create a section view in SolidWorks?",
+    options: ["Ctrl + S", "Insert > Section View", "Tools > Section", "View > Section"],
+    answer: "Insert > Section View"
+  },
+  {
+    week: 6,
+    question: "In SolidWorks, what does the 'Spline' tool allow you to create?",
+    options: ["Helical curves", "Curved surfaces", "Smooth curves without defined points", "Tangent lines"],
+    answer: "Smooth curves without defined points"
+  },
+  {
+    week: 6,
+    question: "Which of the following is not CAM software?",
+    options: ["CATIA", "Fusion 360", "Ultimaker Cura", "Siemens NX Cam"],
+    answer: "Ultimaker Cura"
+  },
+  {
+    week: 6,
+    question: "In PowerMill, what is the basic purpose of the 'NC Code' module?",
+    options: ["Simulate machine movements", "Generate numerical control code", "Analyze toolpath efficiency", "Control the machine's power supply"],
+    answer: "Generate numerical control code"
+  },
+  {
+    week: 6,
+    question: "In PowerMill, what does the term 'Input Parameters' refer to?",
+    options: ["The speed at which the machine is powered on", "Values that define the machining process, such as stepovers and stepdowns", "The precision of the machine's movements", "The rotation speed of the cutting tool"],
+    answer: "Values that define the machining process, such as stepovers and stepdowns"
+  },
+  {
+    week: 6,
+    question: "What does the 'Profile Form' in PowerMill allow you to define?",
+    options: ["The material properties of a part", "The geometric limits of the machining area", "The toolpath strategy for finishing operations", "The shape and dimensions of a profile to be machined"],
+    answer: "The shape and dimensions of a profile to be machined"
+  },
+  {
+    week: 6,
+    question: "In PowerMill, what is the purpose of the 'Stock Models' feature in the context of NC Programs?",
+    options: ["Simulate the remaining material after previous operations", "Specify the cutting conditions, such as feeds and speeds", "Generate G-code", "Define the geometric limits of the machining area"],
+    answer: "Simulate the remaining material after previous operations"
+  },
+  {
+    week: 7,
+    question: "CAD stands for Computer Aided Data in the context of Group Technology.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 7,
+    question: "What are the results that group technologies have at the organizational level?",
+    options: ["Systematic design and redesign", "Systematic design and redesign", "Less process planning time and setup time", "All of these"],
+    answer: "All of these"
+  },
+  {
+    week: 7,
+    question: "________________ is the planning of production and manufacturing modules in a company or industry.",
+    options: ["Process planning", "Production planning", "Machining planning", "Design layout"],
+    answer: "Production planning"
+  },
+  {
+    week: 7,
+    question: "Visual inspection is one of the ways to identify part families.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 7,
+    question: "Which operation in process planning provides a coating on the work surface?",
+    options: ["Operation to enhance properties", "Finishing operations", "Secondary process", "Basic process"],
+    answer: "Finishing operations"
+  },
+  {
+    week: 7,
+    question: "Variant CAPP is based on _________.",
+    options: ["Artificial Intelligence", "Group Technology", "Robotics", "Virtual Reality"],
+    answer: "Group Technology"
+  },
+  {
+    week: 7,
+    question: "What is identified as the first key to implementing a generative system?",
+    options: ["Database development", "Decision rules development", "Material Processing", "Artificial Intelligence"],
+    answer: "Decision rules development"
+  },
+  {
+    week: 7,
+    question: "The standard process plans in Retrieval CAPP System are stored in offline databases.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 7,
+    question: "Which activity required for new process technologies must be planned and managed?",
+    options: ["Decisions", "Investment project management", "Facilities planning", "Manufacturing"],
+    answer: "Investment project management"
+  },
+  {
+    week: 7,
+    question: "__________ utilizes the resources allocation of the activities of employees, materials and production capacity, in order to save different customers.",
+    options: ["Process planning", "Production planning", "Manufacturing planning", "None of these"],
+    answer: "Production planning"
+  },
+  {
+    week: 8,
+    question: "An FMS is capable of producing a single part family or a limited range of part families.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 8,
+    question: "What are the duties performed by the human labors?",
+    options: ["NC part programming", "Changing and setting cutting tools", "Maintenance and repair of equipment", "All of these"],
+    answer: "All of these"
+  },
+  {
+    week: 8,
+    question: "_________ layout allows recirculation of pallets back to the first station in the sequence after unloading at the final station.",
+    options: ["In-line", "Loop", "Open field", "Rectangular"],
+    answer: "Rectangular"
+  },
+  {
+    week: 8,
+    question: "Which component of AIDC is responsible for converting electrical signal into digital data and finally back into original alphanumeric characters?",
+    options: ["Data decoding", "Machine reading", "Data encoding", "Alphanumeric conversion"],
+    answer: "Data decoding"
+  },
+  {
+    week: 8,
+    question: "What is a characteristic of Smart Card in AIDC technology?",
+    options: ["Utilizes bar code", "Involves touch screens", "Small plastic cards embedded with microchips", "None of these"],
+    answer: "Small plastic cards embedded with microchips"
+  },
+  {
+    week: 8,
+    question: "Which of the following is used to drive high current electromagnetic loads?",
+    options: ["General – Purpose outputs", "Pilot Duty outputs", "Discrete inputs", "None of these"],
+    answer: "Pilot Duty outputs"
+  },
+  {
+    week: 8,
+    question: "In FMS planning, size and weight determine the size of processing equipment and material handling equipment.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 8,
+    question: "_________ is defined as the three-dimensional space within which the robot can manipulate the end of its wrist.",
+    options: ["Work volume", "Wrist assembly", "Data robot", "Polar configuration"],
+    answer: "Work volume"
+  },
+  {
+    week: 8,
+    question: "Contact linear bar code readers focuses a light beam on the bar code and a photodetector reads the reflected signal.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 8,
+    question: "If we perform NAND operation on 1 and 1, what will be its output?",
+    options: ["0", "1", "0.5", "None of these"],
+    answer: "0"
+  },
+  {
+    week: 9,
+    question: "Documentation is not a part of Computer-Aided Quality Control.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 9,
+    question: "__________ is a procedure in which an unknown quantity is compared to a known standard, using an accepted and consistent system of units.",
+    options: ["Measurement", "Displacement", "Reverse engineering", "None of these"],
+    answer: "Measurement"
+  },
+  {
+    week: 9,
+    question: "Resolution in measurement refers to the operating range of the instrument.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 9,
+    question: "Which of the following is an advantage of digital measuring instruments?",
+    options: ["Complex interfacing with computers", "Limited ease of reading", "Finite number of input values", "Ease of reading and interfacing to a computer"],
+    answer: "Ease of reading and interfacing to a computer"
+  },
+  {
+    week: 9,
+    question: "Off-line programs include motion commands, measurement commands, and report formatting commands and is prepared off-line.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 9,
+    question: "_________ compares measurements with part drawing dimension and tolerance.",
+    options: ["Tolerance analysis", "Part coordinate system", "Geometric feature", "Probe calibration"],
+    answer: "Tolerance analysis"
+  },
+  {
+    week: 9,
+    question: "What is the primary purpose of a Coordinate Measuring Machine (CMM)?",
+    options: ["Object fabrication", "Measuring geometrical characteristics", "Mechanical assembly", "Object design"],
+    answer: "Measuring geometrical characteristics"
+  },
+  {
+    week: 9,
+    question: "______________ is the technique to define and separate regions of interest in the image.",
+    options: ["Edge detection", "Thresholding", "Segmentation", "None of these"],
+    answer: "Segmentation"
+  },
+  {
+    week: 9,
+    question: "Control charts measure and monitor common causes of variations in the process.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 9,
+    question: "The process average is measured using a ________ chart.",
+    options: ["X-bar", "R", "U", "None of these"],
+    answer: "X-bar"
+  },
+  {
+    week: 10,
+    question: "Documentation is not a part of Computer-Aided Quality Control.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 10,
+    question: "__________ is a procedure in which an unknown quantity is compared to a known standard, using an accepted and consistent system of units.",
+    options: ["Measurement", "Displacement", "Reverse engineering", "None of these"],
+    answer: "Measurement"
+  },
+  {
+    week: 10,
+    question: "Resolution in measurement refers to the operating range of the instrument.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 10,
+    question: "Which of the following is an advantage of digital measuring instruments?",
+    options: ["Complex interfacing with computers", "Limited ease of reading", "Finite number of input values", "Ease of reading and interfacing to a computer"],
+    answer: "Ease of reading and interfacing to a computer"
+  },
+  {
+    week: 10,
+    question: "Off-line programs include motion commands, measurement commands, and report formatting commands and is prepared off-line.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 10,
+    question: "_________ compares measurements with part drawing dimension and tolerance.",
+    options: ["Tolerance analysis", "Part coordinate system", "Geometric feature", "Probe calibration"],
+    answer: "Tolerance analysis"
+  },
+  {
+    week: 10,
+    question: "What is the primary purpose of a Coordinate Measuring Machine (CMM)?",
+    options: ["Object fabrication", "Measuring geometrical characteristics", "Mechanical assembly", "Object design"],
+    answer: "Measuring geometrical characteristics"
+  },
+  {
+    week: 10,
+    question: "______________ is the technique to define and separate regions of interest in the image.",
+    options: ["Edge detection", "Thresholding", "Segmentation", "None of these"],
+    answer: "Segmentation"
+  },
+  {
+    week: 10,
+    question: "Control charts measure and monitor common causes of variations in the process.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 10,
+    question: "The process average is measured using a ________ chart.",
+    options: ["X-bar", "R", "U", "None of these"],
+    answer: "X-bar"
+  },
+  {
+    week: 11,
+    question: "As per the material handling principles, the material should be moved individually rather than in lots.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 11,
+    question: "Which of the following is the objective of material handling?",
+    options: ["To increase manufacturing costs", "To provide better working conditions", "To decrease storage capacity", "To slow down material flow"],
+    answer: "To provide better working conditions"
+  },
+  {
+    week: 11,
+    question: "In material handling, what determines whether the material must be moved in individual units, as batches, or continuously?",
+    options: ["Flow rate", "Scheduling", "Routing", "Buffer stocks"],
+    answer: "Flow rate"
+  },
+  {
+    week: 11,
+    question: "In which of the following areas can Automated Guided Vehicles be utilized?",
+    options: ["Assembly line", "Storage and distribution", "Flexible manufacturing system", "All of these"],
+    answer: "All of these"
+  },
+  {
+    week: 11,
+    question: "Cranes are majorly used for vertical lifting of materials.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 11,
+    question: "What does PLM stand for?",
+    options: ["Project Lifecycle Management", "Product Lifecycle Management", "Process Lifecycle Management", "Program Lifecycle Management"],
+    answer: "Product Lifecycle Management"
+  },
+  {
+    week: 11,
+    question: "What does the 'Source' object represent in Tecnomatix Plant Simulation?",
+    options: ["The end point of the material flow", "The starting point of the material flow", "A placeholder for objects", "A component for sorting"],
+    answer: "The starting point of the material flow"
+  },
+  {
+    week: 11,
+    question: "In Tecnomatix Plant Simulation, what does the 'Event Controller' object control?",
+    options: ["Material handling", "Angular conversion", "Buffer management", "Flow control"],
+    answer: "Flow control"
+  },
+  {
+    week: 11,
+    question: "Which distribution in Tecnomatix Plant Simulation is characterized by its flexibility and is often used for modeling uncertainty with shape parameters?",
+    options: ["Uniform Distribution", "Triangular Distribution", "Beta Distribution", "Normal Distribution"],
+    answer: "Beta Distribution"
+  },
+  {
+    week: 11,
+    question: "What is the purpose of the 'Availability' object in Tecnomatix Plant Simulation?",
+    options: ["Simulation of production processes", "Representation of a single process step", "Simulation of resource availability", "Simulation of sorting processes"],
+    answer: "Simulation of resource availability"
+  },
+  {
+    week: 12,
+    question: "Reinforcement learning is characterized by learning through rewards and punishment without explicit training.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 12,
+    question: "Which type of AI involves machines with the ability to perform any intellectual task that a human can do?",
+    options: ["Narrow AI", "General Intelligence", "Super Intelligence", "Weak AI"],
+    answer: "General Intelligence"
+  },
+  {
+    week: 12,
+    question: "What is one of the dimensions of Digital Manufacturing?",
+    options: ["Data center management", "Customer relationship management", "Smart factory", "Employee training development"],
+    answer: "Smart factory"
+  },
+  {
+    week: 12,
+    question: "The Internet of Things (IOT) merges the digital and physical universe, making the manufacturing more smarter but less responsive.",
+    options: ["True", "False"],
+    answer: "False"
+  },
+  {
+    week: 12,
+    question: "Which of the following is the core application of Big Data in manufacturing?",
+    options: ["Pollution control", "Risk management", "Disposal management", "Marketing management"],
+    answer: "Risk management"
+  },
+  {
+    week: 12,
+    question: "The use of IOT sensors in manufacturing equipment enables condition-based maintenance alerts.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 12,
+    question: "What is the main advantage of AR application in manufacturing?",
+    options: ["Better feedback", "Better preview", "Detailed models", "All of these"],
+    answer: "All of these"
+  },
+  {
+    week: 12,
+    question: "Cyber security has become a critical component of effective management in manufacturing.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+  {
+    week: 12,
+    question: "_________ is the engineering application of computers and computer-controlled machines for the definition and inspection of the quality of products.",
+    options: ["CAQ", "CMM", "FMS", "GT"],
+    answer: "CAQ"
+  },
+  {
+    week: 12,
+    question: "Both AR and VR help in automating the process by using distance controlling.",
+    options: ["True", "False"],
+    answer: "True"
+  },
+    ];
+
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let score = 0;
+
+    function startQuiz() {
+      const randomize = document.getElementById("randomize").checked;
+      const week = document.getElementById("week-select").value;
+
+      currentQuestions =
+        week === "all"
+          ? allQuestions
+          : allQuestions.filter(q => q.week === Number(week));
+
+      if (randomize) currentQuestions = shuffle(currentQuestions);
+
+      document.getElementById("start").style.display = "none";
+      document.getElementById("quiz").style.display = "block";
+
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = currentQuestions[currentIndex];
+      const container = document.getElementById("question-container");
+
+      container.innerHTML = `
+        <div class="question">Q${currentIndex + 1}: ${q.question}</div>
+        <div class="options">
+          ${q.options
+            .map(
+              opt => `
+              <label><input type="radio" name="answer" value="${opt}"> ${opt}</label>
+            `
+            )
+            .join("")}
+        </div>
+      `;
+
+      document.getElementById("feedback").innerHTML = "";
+      document.getElementById("submit-button").disabled = false;
+      document.getElementById("next-button").style.display = "none";
+    }
+
+    function submitAnswer() {
+      const selected = document.querySelector('input[name="answer"]:checked');
+      const feedback = document.getElementById("feedback");
+
+      if (!selected) return alert("Please select an answer.");
+
+      const correct = currentQuestions[currentIndex].answer;
+      if (selected.value === correct) {
+        score++;
+        feedback.innerHTML = `<span class="correct">Correct!</span>`;
+      } else {
+        feedback.innerHTML = `<span class="incorrect">Incorrect! Correct answer is: ${correct}</span>`;
+      }
+
+      // Disable submit, enable next
+      document.getElementById("submit-button").disabled = true;
+      document.getElementById("next-button").style.display = "inline-block";
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      if (currentIndex < currentQuestions.length) {
+        showQuestion();
+      } else {
+        document.getElementById("quiz").style.display = "none";
+        document.getElementById("score").style.display = "block";
+        document.getElementById("final-score").innerText = `${score} / ${currentQuestions.length}`;
+      }
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+  </script>
+</body>
+</html>
