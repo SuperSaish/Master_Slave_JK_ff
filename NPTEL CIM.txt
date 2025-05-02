@@ -704,77 +704,81 @@ X-bar
 
 WEEK 10:
 
-Documentation is not a part of Computer-Aided Quality Control.
- True
- False
-Accepted Answers:
-False
-
-__________ is a procedure in which an unknown quantity is compared to a known standard, using an accepted and consistent system of units.
- Measurement
- Displacement
- Reverse engineering
- None of these
-Accepted Answers:
-Measurement
-
-Resolution in measurement refers to the operating range of the instrument.
- True
- False
-Accepted Answers:
-False
-
-Which of the following is an advantage of digital measuring instruments?
- Complex interfacing with computers
- Limited ease of reading
- Finite number of input values
- Ease of reading and interfacing to a computer
-Accepted Answers:
-Ease of reading and interfacing to a computer
-
-Off-line programs include motion commands, measurement commands, and report formatting commands and is prepared off-line.
+Rapid manufacturing has developed as the next stage, in which the need for tooling is eliminated.
  True
  False
 Accepted Answers:
 True
 
-_________ compares measurements with part drawing dimension and tolerance.
- Tolerance analysis
- Part coordinate system
- Geometric feature
- Probe calibration
-Accepted Answers:
-Tolerance analysis
-
-What is the primary purpose of a Coordinate Measuring Machine (CMM)?
- Object fabrication
- Measuring geometrical characteristics
- Mechanical assembly
- Object design
-Accepted Answers:
-Measuring geometrical characteristics
-
-______________ is the technique to define and separate regions of interest in the image.
- Edge detection
- Thresholding
- Segmentation
+The subtractive manufacturing process is considered as __________ compared to other methods.
+ sustainable
+ efficient
+ wasteful
  None of these
 Accepted Answers:
-Segmentation
+wasteful
 
-Control charts measure and monitor common causes of variations in the process.
+Which of the following is a method of rapid tooling?
+ Keltool
+ Investment casting
+ Sprayed metal tooling
+ All of these
+Accepted Answers:
+All of these
+
+In Selective Laser Sintering, prior heating is required to bring the temperature of the powder  below the sintering temperature.
  True
  False
 Accepted Answers:
 True
 
-The process average is measured using a ________ chart.
- X-bar
- R
- U
+____________ in RM will enable increasingly complex designs to be realized that are fully optimized for the function that they are required for.
+ Digital freedom
+ Parts consolidation
+ Geometrical freedom
  None of these
 Accepted Answers:
-X-bar
+Digital freedom
+
+Which TECHB software feature controls the amount of material inside the printed object?
+ Layer height
+ Infill density
+ Brim thickness
+ Print speed
+Accepted Answers:
+Infill density
+
+What does the term ‘extrusion temperature’ refers to in 3D printing?
+ Cooling temperature of the printed layers
+ Melting point of the filament
+ Speed of the extruder motor
+ Thickness of the support structures
+Accepted Answers:
+Melting point of the filament
+
+How does adjusting the print bed temperature impacts the 3D printing process?
+ Changes the layer height
+ Alters the color of the printed object
+ Affects layer adhesion to the build platform
+ Modifies the infill pattern
+Accepted Answers:
+Affects layer adhesion to the build platform
+
+What role does the ‘Timeline’ play in Fusion 360?
+ It shows a history of changes made to the design
+ It controls the speed of animations
+ It determines the rendering settings
+ It displays the print progress in 3D printing
+Accepted Answers:
+It shows a history of changes made to the design
+
+Which file format is commonly used for 3D printing and is supported by most 3D printers?
+ JPG
+ PNG
+ STL
+ GIF
+Accepted Answers:
+STL
 
 WEEK 11:
 
