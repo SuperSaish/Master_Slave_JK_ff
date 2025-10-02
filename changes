@@ -1,0 +1,99 @@
+Ah! Now I understand the real issue.
+
+The current check_condition() only handles numeric comparisons properly if input_value is numeric. But for REL, you want to support ranges like >=2.00 & <3.00 even if input_value is a number or string. Your current code evaluates compound conditions only if & is in condition_str, but it uses eval(f"{input_value} {op} {float(num)}") assuming input_value is numeric — if REL comes as a string it won’t evaluate correctly.
+
+We need to refactor check_condition() so it can correctly handle numeric ranges in REL.
+
+
+---
+
+🔹 Corrected check_condition() for ranges
+
+import re
+
+def check_condition(input_value, condition_str):
+    """
+    Checks if input_value satisfies condition_str.
+    condition_str can be:
+      - 'NONE' → always True
+      - single number or string → exact match
+      - numeric comparisons: >=2.0, <3.5
+      - compound numeric comparisons: >=2.0 & <3.0
+    """
+    condition_str = condition_str.strip().strip('_')
+    input_value = input_value.strip().strip('_')
+
+    # Match all
+    if condition_str.upper() == "NONE":
+        return True
+
+    # Try converting input_value to float
+    try:
+        input_num = float(input_value)
+        is_numeric = True
+    except ValueError:
+        is_numeric = False
+
+    # Handle compound conditions with &
+    if '&' in condition_str:
+        conditions = condition_str.split('&')
+        results = []
+        for cond in conditions:
+            cond = cond.strip()
+            match = re.match(r'(>=|<=|>|<|==)\s*(\d+(\.\d+)?)', cond)
+            if match and is_numeric:
+                op, num = match.group(1), float(match.group(2))
+                results.append(eval(f"{input_num} {op} {num}"))
+            else:
+                # fallback: exact string match
+                results.append(input_value.lower() == cond.lower())
+        return all(results)
+
+    # Handle single condition
+    single_match = re.match(r'(>=|<=|>|<|==)\s*(\d+(\.\d+)?)', condition_str)
+    if single_match and is_numeric:
+        op, num = single_match.group(1), float(single_match.group(2))
+        return eval(f"{input_num} {op} {num}")
+
+    # If numeric, try exact match
+    if is_numeric:
+        try:
+            return input_num == float(condition_str)
+        except ValueError:
+            pass
+
+    # fallback: string match
+    return input_value.lower() == condition_str.lower()
+
+
+---
+
+🔹 How This Works
+
+Supports single numeric comparisons (>=2.0, <3.0).
+
+Supports compound comparisons (>=2.0 & <3.0), returning True only if all conditions are satisfied.
+
+Falls back to string match if input or condition is not numeric.
+
+'NONE' still matches everything.
+
+
+
+---
+
+🔹 Example
+
+check_condition("2.5", ">=2.0 & <3.0")   # True
+check_condition("3.5", ">=2.0 & <3.0")   # False
+check_condition("A", "A")                # True
+check_condition("B", "A")                # False
+check_condition("2.5", "NONE")           # True
+
+
+---
+
+If you want, I can now update your full script with this new check_condition() so that REL filtering works correctly for numeric ranges like >=2.00 & <3.00.
+
+Do you want me to do that?
+
