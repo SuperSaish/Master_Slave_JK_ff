@@ -4,7 +4,8 @@ import argparse
 
 def check_condition(input_value, condition_str):
     """Checks if the given input_value matches the condition string from CSV."""
-    condition_str = condition_str.strip().strip('_')
+    condition_str = condition_str.strip()
+    condition_str = condition_str.strip('_')
     input_value = input_value.strip('_')
 
     if condition_str.upper() == "NONE":
@@ -34,41 +35,46 @@ def check_condition(input_value, condition_str):
 
 def find_matching_rows(csv_file_path, input_proc, input_rel):
     """Returns GEN1_4 and GEN5 values for matching rows."""
-    gen1_4_1, gen1_4_2, gen1_4_3 = [], [], []
-    gen5_1, gen5_2, gen5_3 = [], [], []
-
+    #gen1_4_1, gen1_4_2, gen1_4_3 = [], [], []
+    #gen5_1, gen5_2, gen5_3 = [], [], []
+    Gen41, Gen42, Gen43, Gen51, Gen52, Gen53 = [] , [] , [] , [] ,[] ,[] 
     with open(csv_file_path, newline='') as csvfile:
-        reader = csv.DictReader(csvfile)
+        reader = csv.reader(csvfile)
         for row in reader:
-            if check_condition(input_proc, row['PROC']) and check_condition(input_rel, row['REL']):
-                gen1_4_1.append(row['GEN1_4_1'])
-                gen1_4_2.append(row['GEN1_4_2'])
-                gen1_4_3.append(row['GEN1_4_3'])
-                gen5_1.append(row['GEN5_1'])
-                gen5_2.append(row['GEN5_2'])
-                gen5_3.append(row['GEN5_3'])
+            if check_condition(input_proc, row[0]) and check_condition(input_rel, row[1]):
+                #matching_parameters[row[1],row[2],row[3],row[4],row[5],row[6].append(row[1])
+                Gen41.append(row[2])
+                Gen42.append(row[3])
+                Gen43.append(row[4])
+                Gen51.append(row[5])
+                Gen52.append(row[6])
+                Gen53.append(row[7])
 
-    return gen1_4_1, gen1_4_2, gen1_4_3, gen5_1, gen5_2, gen5_3
+    return Gen41, Gen42, Gen43, Gen51, Gen52, Gen53
 
 def main():
     parser = argparse.ArgumentParser(description="Generate rtrim_threshold.txt from RTRIM.csv")
-    parser.add_argument('-PROC', type=str, required=True, help='PROC value')
-    parser.add_argument('-REL', type=str, required=True, help='REL value')
-    parser.add_argument('-CSV', type=str, default='RTRIM.csv', help='CSV file path')
-    parser.add_argument('-OUT', type=str, default='rtrim_threshold.txt', help='Output file path')
+    parser.add_argument('-PROC', type=str, required=True, help='Argument PROC')
+    parser.add_argument('-REL', type=str, required=True, help='Argument REL')
+    csv_file='RTRIM.csv'
     args = parser.parse_args()
 
-    g1_1, g1_2, g1_3, g5_1, g5_2, g5_3 = find_matching_rows(args.CSV, args.PROC, args.REL)
+    Gen41, Gen42, Gen43, Gen51, Gen52, Gen53= find_matching_rows(csv_file, args.PROC, args.REL)
+    #global matching_parameters
+    #matching_parameters = {'Gen41': [], 'Gen42': [], 'Gen43': [], 'Gen51': [], 'Gen52': [], 'Gen53': []}
+    #find_matching_rows(csv_file, args.PROC, args.REL)
 
-    with open(args.OUT, "w") as file:
-        file.write(f'set RTRIM_THRESHOLD_1_GEN1_4 "{" ".join(g1_1)}"\n')
-        file.write(f'set RTRIM_THRESHOLD_2_GEN1_4 "{" ".join(g1_2)}"\n')
-        file.write(f'set RTRIM_THRESHOLD_3_GEN1_4 "{" ".join(g1_3)}"\n')
-        file.write(f'set RTRIM_THRESHOLD_1_GEN5 "{" ".join(g5_1)}"\n')
-        file.write(f'set RTRIM_THRESHOLD_2_GEN5 "{" ".join(g5_2)}"\n')
-        file.write(f'set RTRIM_THRESHOLD_3_GEN5 "{" ".join(g5_3)}"\n')
 
-    print(f"Generated {args.OUT} successfully.")
+    
+    with open("param_thresh_set.def", "w") as file:
+        file.write(f"set RTRIM_THRESHOLD_1_GEN1_4 0x{' '.join(['Gen41'])}")
+        file.write(f"set RTRIM_THRESHOLD_2_GEN1_4 0x{' '.join(['Gen42'])}")
+        file.write(f"set RTRIM_THRESHOLD_3_GEN1_4 0x{' '.join(['Gen43'])}")
+        file.write(f"set RTRIM_THRESHOLD_1_GEN5 0x{' '.join(['Gen51'])}")
+        file.write(f"set RTRIM_THRESHOLD_2_GEN5 0x{' '.join(['Gen52'])}")
+        file.write(f"set RTRIM_THRESHOLD_3_GEN5 0x{' '.join(['Gen53'])}")
+
+    #print(f" Generated successfully.")
 
 if __name__ == "__main__":
     main()
