@@ -1,99 +1,135 @@
-Ah! Now I understand the real issue.
+#!/bin/csh -f
+#
+# CSH script equivalent of Python flow (till Step5)
+#
 
-The current check_condition() only handles numeric comparisons properly if input_value is numeric. But for REL, you want to support ranges like >=2.00 & <3.00 even if input_value is a number or string. Your current code evaluates compound conditions only if & is in condition_str, but it uses eval(f"{input_value} {op} {float(num)}") assuming input_value is numeric — if REL comes as a string it won’t evaluate correctly.
+# ===========================
+# Logging helpers
+# ===========================
+alias write_log  'echo "[INFO] \!*"'
+alias write_warn 'echo "[WARN] \!*"'
+alias write_err  'echo "[ERR]  \!*"'
 
-We need to refactor check_condition() so it can correctly handle numeric ranges in REL.
+# ===========================
+# Step0: Check env & args
+# ===========================
+if (! $?SDS_ROOT) then
+    write_err "SDS_ROOT not set. Please export SDS_ROOT before running."
+    exit 1
+endif
 
+if ($#argv < 8) then
+    write_err "Usage: $0 <process> <base_ipxact_label> <new_ipxact_label> <ver_asm> <header_fw_new> <header_adpt_revision_new> <header_set_excel_rev_new> <header_reg_addr_def_new>"
+    exit 1
+endif
 
----
+set sds_root                    = $SDS_ROOT
+set process                     = $1
+set base_ipxact_label           = $2
+set new_ipxact_label            = $3
+set ver_asm                     = $4
+set header_fw_new               = $5
+set header_adpt_revision_new    = $6
+set header_set_excel_rev_new    = $7
+set header_reg_addr_def_new     = $8
 
-🔹 Corrected check_condition() for ranges
+write_log "SDS_ROOT = $sds_root"
+write_log "Process  = $process"
+write_log "Base IPXACT Label = $base_ipxact_label"
+write_log "New IPXACT Label  = $new_ipxact_label"
 
-import re
+# ===========================
+# Step1: Check testchip dir
+# ===========================
+set testchip_dir = "$sds_root/pma/tech/$process/ipxact/testchip"
+if (! -d $testchip_dir) then
+    write_log "Creating testchip dir: $testchip_dir"
+    mkdir -p $testchip_dir
+else
+    write_log "Testchip dir exists: $testchip_dir"
+endif
 
-def check_condition(input_value, condition_str):
-    """
-    Checks if input_value satisfies condition_str.
-    condition_str can be:
-      - 'NONE' → always True
-      - single number or string → exact match
-      - numeric comparisons: >=2.0, <3.5
-      - compound numeric comparisons: >=2.0 & <3.0
-    """
-    condition_str = condition_str.strip().strip('_')
-    input_value = input_value.strip().strip('_')
+# ===========================
+# Step2: Sync ASM file
+# ===========================
+set path_asm = "$sds_root/pcs_raw/firmware/code/startup_off_cal_adapt.asm"
+write_log "Syncing ASM file: $path_asm"
+p4 sync ${path_asm}#${ver_asm}
+if ($status != 0) then
+    write_err "p4 sync failed for $path_asm"
+    exit 1
+endif
 
-    # Match all
-    if condition_str.upper() == "NONE":
-        return True
+# ===========================
+# Step3: Firmware header sync & update
+# ===========================
+set path_fw_header = "$sds_root/pcs_raw/firmware/code/$process/firmware.header"
+write_log "Syncing Firmware Header: $path_fw_header"
+p4 sync ${path_fw_header}@$base_ipxact_label
+if ($status != 0) then
+    write_err "p4 sync failed for firmware.header"
+    exit 1
+endif
 
-    # Try converting input_value to float
-    try:
-        input_num = float(input_value)
-        is_numeric = True
-    except ValueError:
-        is_numeric = False
+if (-e $path_fw_header) then
+    set tmpfile = "/tmp/fw_header.$$"
+    # Replace FW line (simplified: assumes a line starting with FW exists)
+    sed "s/^FW.*/FW = $header_fw_new/" $path_fw_header >! $tmpfile
+    mv $tmpfile $path_fw_header
+    write_log "Updated firmware.header with FW=$header_fw_new"
+else
+    write_warn "Firmware header not found: $path_fw_header"
+endif
 
-    # Handle compound conditions with &
-    if '&' in condition_str:
-        conditions = condition_str.split('&')
-        results = []
-        for cond in conditions:
-            cond = cond.strip()
-            match = re.match(r'(>=|<=|>|<|==)\s*(\d+(\.\d+)?)', cond)
-            if match and is_numeric:
-                op, num = match.group(1), float(match.group(2))
-                results.append(eval(f"{input_num} {op} {num}"))
-            else:
-                # fallback: exact string match
-                results.append(input_value.lower() == cond.lower())
-        return all(results)
+# ===========================
+# Step4: Update reg_addr.def
+# ===========================
+set path_sds_cregs = "$sds_root/pma/tech/$process/ipxact/sds_cregs.v"
+set path_fw_dir    = "$sds_root/pcs_raw/firmware/code/$process"
 
-    # Handle single condition
-    single_match = re.match(r'(>=|<=|>|<|==)\s*(\d+(\.\d+)?)', condition_str)
-    if single_match and is_numeric:
-        op, num = single_match.group(1), float(single_match.group(2))
-        return eval(f"{input_num} {op} {num}")
+set path_fw_reg_addr_def_old = "$path_fw_dir/reg_addr.def"
+set path_fw_reg_addr_def_new = "$path_fw_dir/reg_addr.def_${header_reg_addr_def_new}"
 
-    # If numeric, try exact match
-    if is_numeric:
-        try:
-            return input_num == float(condition_str)
-        except ValueError:
-            pass
+write_log "Generating new reg_addr.def..."
+$sds_root/pcs_raw/firmware/bin/16k_get_reg_addr.pl \
+   $path_sds_cregs $path_fw_reg_addr_def_new
 
-    # fallback: string match
-    return input_value.lower() == condition_str.lower()
+if (-e $path_fw_reg_addr_def_old) then
+    diff $path_fw_reg_addr_def_old $path_fw_reg_addr_def_new > /dev/null
+    if ($status != 0) then
+        write_log "reg_addr.def differs → updating"
+        cp -f $path_fw_reg_addr_def_new $path_fw_reg_addr_def_old
+    else
+        write_log "reg_addr.def is already up to date"
+    endif
+else
+    write_log "Creating reg_addr.def from new version"
+    cp -f $path_fw_reg_addr_def_new $path_fw_reg_addr_def_old
+endif
 
+# ===========================
+# Step5: Update sds_defines.v
+# ===========================
+set path_sds_def_old = "$sds_root/pma/tech/$process/ipxact/sds_defines.v"
+set path_sds_def_new = "$sds_root/pma/tech/$process/ipxact/sds_defines.v_$new_ipxact_label"
 
----
+write_log "Checking sds_defines.v update..."
+if (-e $path_sds_def_new) then
+    if (-e $path_sds_def_old) then
+        diff $path_sds_def_old $path_sds_def_new > /dev/null
+        if ($status != 0) then
+            write_log "sds_defines.v differs → updating"
+            cp -f $path_sds_def_new $path_sds_def_old
+        else
+            write_log "sds_defines.v already up to date"
+        endif
+    else
+        write_log "Creating new sds_defines.v from $path_sds_def_new"
+        cp -f $path_sds_def_new $path_sds_def_old
+    endif
+else
+    write_warn "New sds_defines.v not found: $path_sds_def_new"
+endif
 
-🔹 How This Works
-
-Supports single numeric comparisons (>=2.0, <3.0).
-
-Supports compound comparisons (>=2.0 & <3.0), returning True only if all conditions are satisfied.
-
-Falls back to string match if input or condition is not numeric.
-
-'NONE' still matches everything.
-
-
-
----
-
-🔹 Example
-
-check_condition("2.5", ">=2.0 & <3.0")   # True
-check_condition("3.5", ">=2.0 & <3.0")   # False
-check_condition("A", "A")                # True
-check_condition("B", "A")                # False
-check_condition("2.5", "NONE")           # True
-
-
----
-
-If you want, I can now update your full script with this new check_condition() so that REL filtering works correctly for numeric ranges like >=2.00 & <3.00.
-
-Do you want me to do that?
-
+write_log "Steps 0–5 completed successfully."
+exit 0
